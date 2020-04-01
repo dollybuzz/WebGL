@@ -144,7 +144,7 @@
         shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
         gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
 
-        // todo
+        // todo #5
         // Get a reference to the color attribute variable in the vertex shader and enable it
 
         shaderProgram.worldMatrixUniform = gl.getUniformLocation(shaderProgram, "uWorldMatrix");
@@ -194,11 +194,23 @@
 
         // todo
         // 1. create color buffer
+        var colorBuffer = gl.createBuffer();
+
         // 2. bind color buffer
+        gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+
         // 3. create color array
+        var colors = [
+            1.0,    0.0,    0.0,    1.0,    //red
+            0.0,    2.0,    0.0,    1.0,    //green
+            0.0,    0.0,    1.0,    1.0     //blue
+        ];
+
         // 4. "buffer" color data
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+
         // 5. store a reference to the color buffer on the triangleGeometry object
-        //    triangleGeometry.colorBuffer = ??;
+        triangleGeometry.colorBuffer = colorBuffer;
     }
 
     // -------------------------------------------------------------------------
