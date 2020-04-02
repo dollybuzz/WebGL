@@ -9,6 +9,7 @@
 <!-- vertex shader - Our part in the geometry processing part of the pipeline happens here -->
 <script id="shader-vs" type="x-shader/x-vertex">
     attribute vec3 aVertexPosition;
+    attribute vec3 aVertexColor;
 
     uniform mat4 uWorldMatrix;
     uniform mat4 uViewMatrix;
@@ -192,7 +193,7 @@
         // WebGL needs to know how many vertices we have
         triangleGeometry.bufferItemCount = 3;
 
-        // todo
+        // todo #7
         // 1. create color buffer
         var colorBuffer = gl.createBuffer();
 
@@ -210,6 +211,7 @@
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
 
         // 5. store a reference to the color buffer on the triangleGeometry object
+        triangleGeometry.positionBuffer = positionBuffer;
         triangleGeometry.colorBuffer = colorBuffer;
     }
 
@@ -274,15 +276,21 @@
 
     // -------------------------------------------------------------------------
     function renderTriangle(secondsElapsedSinceStart) {
+        // todo #6
+        // - update the triangle geometry world matrix here (used to place the triangle into world space)
+        // - set view matrix to identity
+        triangleGeometry.worldMatrix.setIdentity();
+
+        // todo #6 - set the projection matrix using values from online guide
+        projectionMatrix.setPerspective(45, gl.canvasWidth, gl.canvasHeight, 0.1, 1000);
+
+        triangleGeometry.worldMatrix.setRotationY(degrees); //todo #11
+        triangleGeometry.worldMatrix.translate(0, 0, -7); //part of todo #6
+
         // calculate the number of degrees we should have rotated given how much time has elapsed
         // 60 degrees per second
         var degrees = secondsElapsedSinceStart * 60;
-
-        // todo #7
-        // - update the triangle geometry world matrix here (used to place the triangle into world space)
-        // - set view matrix to identity
-        // - set the projection matrix using values from online guide
-
+        
         gl.bindBuffer(gl.ARRAY_BUFFER, triangleGeometry.positionBuffer);
         gl.vertexAttribPointer(
             triangleGeometry.shaderProgram.vertexPositionAttribute,
