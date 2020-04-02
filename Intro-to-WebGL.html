@@ -7,6 +7,7 @@
 <script src="math/matrix4.js"></script>
 
 <!-- vertex shader - Our part in the geometry processing part of the pipeline happens here -->
+ <!-- todo #8 -->
 <script id="shader-vs" type="x-shader/x-vertex">
     attribute vec3 aVertexPosition;
     attribute vec3 aVertexColor;
@@ -24,7 +25,7 @@
             uWorldMatrix *
             vec4(aVertexPosition, 1.0); // treat the vertex as a point, multiply right to left
 
-        vColor = vec3(0.0, 0.0, 0.0);
+        vColor = aVertexColor;
     }
 </script>
 
@@ -145,8 +146,10 @@
         shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
         gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute);
 
-        // todo #5
+        // todo #9
         // Get a reference to the color attribute variable in the vertex shader and enable it
+        shaderProgram.vertexColorAttribute = gl.getAttribLocation(shaderProgram, "aVertexColor");
+        gl.enableVertexAttribArray(shaderProgram.vertexColorAttribute); //turns the attribute on and stores it in shaderProgram.vertexColorAttribute
 
         shaderProgram.worldMatrixUniform = gl.getUniformLocation(shaderProgram, "uWorldMatrix");
         shaderProgram.viewMatrixUniform = gl.getUniformLocation(shaderProgram, "uViewMatrix");
