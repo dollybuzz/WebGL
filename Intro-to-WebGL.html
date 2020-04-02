@@ -205,9 +205,9 @@
 
         // 3. create color array
         var colors = [
-            1.0,    0.0,    0.0,    1.0,    //red
-            0.0,    2.0,    0.0,    1.0,    //green
-            0.0,    0.0,    1.0,    1.0     //blue
+            1.0,    0.0,    0.0,    //red
+            0.0,    1.0,    0.0,    //green
+            0.0,    0.0,    1.0,    //blue
         ];
 
         // 4. "buffer" color data
@@ -267,7 +267,7 @@
         // todo #2
         // specify what portion of the canvas we want to draw to (all of it, full width and height)
         // uncomment when ready to implement
-         gl.viewport(0, 0, 768, 512);
+         gl.viewport(0, 0, gl.canvasWidth, gl.canvasHeight);
 
         // this is a new frame so let's clear out whatever happened last frame
         gl.clearColor(0.707, 0.707, 1, 1.0);
@@ -285,14 +285,14 @@
         triangleGeometry.worldMatrix.setIdentity();
 
         // todo #6 - set the projection matrix using values from online guide
-        projectionMatrix.setPerspective(45, gl.canvasWidth, gl.canvasHeight, 0.1, 1000);
-
-        triangleGeometry.worldMatrix.setRotationY(degrees); //todo #11
-        triangleGeometry.worldMatrix.translate(0, 0, -7); //part of todo #6
+        projectionMatrix.setPerspective(45, gl.canvasWidth/gl.canvasHeight, 0.1, 1000);
 
         // calculate the number of degrees we should have rotated given how much time has elapsed
         // 60 degrees per second
         var degrees = secondsElapsedSinceStart * 60;
+
+        triangleGeometry.worldMatrix.setRotationY(degrees); //todo #11
+        triangleGeometry.worldMatrix.translate(0, 0, -7); //part of todo #6
         
         gl.bindBuffer(gl.ARRAY_BUFFER, triangleGeometry.positionBuffer);
         gl.vertexAttribPointer(
@@ -305,6 +305,15 @@
         );
 
         // todo #10 - map the color buffer similar to the position buffer above
+        gl.bindBuffer(gl.ARRAY_BUFFER, triangleGeometry.colorBuffer);
+        gl.vertexAttribPointer(
+            triangleGeometry.shaderProgram.vertexColorAttribute,
+            3,
+            gl.FLOAT,
+            gl.FALSE,
+            0,
+            0
+        );
 
         // Send our matrices to the shader
         gl.uniformMatrix4fv(shaderProgram.worldMatrixUniform, false, triangleGeometry.worldMatrix.clone().transpose().elements);
