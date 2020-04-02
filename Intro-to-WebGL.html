@@ -263,6 +263,13 @@
     // -------------------------------------------------------------------------
     function updateAndRender() {
         requestAnimationFrame(updateAndRender);
+        //todo #11
+        //determine the time by calculating the number of seconds that have
+        //elapsed since you started running the app
+        var currentTime = new Date().getTime(); //provides time in ms
+        var elapsed = currentTime - time.lastFrameTime;
+        time.secondsElapsedSinceStart += elapsed/1000; //divide by 1000 to get seconds
+        time.lastFrameTime = currentTime;
 
         // todo #2
         // specify what portion of the canvas we want to draw to (all of it, full width and height)
@@ -273,7 +280,7 @@
         gl.clearColor(0.707, 0.707, 1, 1.0);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        renderTriangle(0);
+        renderTriangle(time.secondsElapsedSinceStart); //todo #11
         // renderLines();
     }
 
